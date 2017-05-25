@@ -4,6 +4,10 @@ import { createStore } from 'redux';
 // IMPORT COMBINED REDUCERS 
 import reducers from './reducers/index';
 
+// IMPORT ACTIONS 
+import { addToCart } from './actions/cartActions';
+import { postBooks, deleteBooks, updateBooks } from './actions/booksActions';
+
 // STEP 1 create the Store
 const store = createStore(reducers);
 
@@ -13,65 +17,30 @@ store.subscribe(function () {
 });
 
 // STEP 2 create and dispatch actions
-store.dispatch(
+store.dispatch(postBooks([
     {
-        type: "POST_BOOK",
-        payload: [
-            {
-                id: 1,
-                title: 'This is the book title.',
-                description: 'This is the book description',
-                price: 33.33
-            },
-            {
-                id: 2,
-                title: 'This is the second book title.',
-                description: 'This is the second book description',
-                price: 99.01
-            }
-        ]
-    }
-);
-
-// DISPATCH a second action
-store.dispatch(
+        id: 1,
+        title: 'This is the book title.',
+        description: 'This is the book description',
+        price: 33.33
+    },
     {
-        type: "POST_BOOK",
-        payload: [{
-            id: 3,
-            title: 'This is the third book title.',
-            description: 'This is the third book description',
-            price: 12.20
-        }]
+        id: 2,
+        title: 'This is the second book title.',
+        description: 'This is the second book description',
+        price: 99.01
     }
-);
+]));
 
 // DELETE 
-store.dispatch(
-    {
-        type: "DELETE_BOOK",
-        payload: { id: 1 }
-    }
-);
+store.dispatch(deleteBooks({ id: 1 }));
 
 // UPDATE 
-store.dispatch(
-    {
-        type: "UPDATE_BOOK",
-        payload: {
-            id: 2,
-            title: "THIS WAS UPDATED"
-        }
-    }
-);
+store.dispatch(updateBooks({
+    id: 2,
+    title: "THIS WAS UPDATED"
+}));
 
 // -->> CART ACTIONS <<--- //
 
-store.dispatch(
-    {
-        type: "ADD_TO_CART",
-        payload: [{
-            id: 1
-        }]
-    }
-); 
+store.dispatch(addToCart([{ id: 1 }])); 
