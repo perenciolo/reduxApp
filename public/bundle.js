@@ -19942,7 +19942,126 @@ function addToCart(book) {
 }
 
 /***/ }),
-/* 219 */,
+/* 219 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+// IMPORT React and Redux
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(0);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactRedux = __webpack_require__(130);
+
+var _booksActions = __webpack_require__(131);
+
+var _redux = __webpack_require__(63);
+
+var _reactBootstrap = __webpack_require__(177);
+
+var _bookItem = __webpack_require__(482);
+
+var _bookItem2 = _interopRequireDefault(_bookItem);
+
+var _bookForm = __webpack_require__(485);
+
+var _bookForm2 = _interopRequireDefault(_bookForm);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+// IMPORT page layouts 
+
+
+var BooksList = function (_React$Component) {
+    _inherits(BooksList, _React$Component);
+
+    function BooksList() {
+        _classCallCheck(this, BooksList);
+
+        return _possibleConstructorReturn(this, (BooksList.__proto__ || Object.getPrototypeOf(BooksList)).apply(this, arguments));
+    }
+
+    _createClass(BooksList, [{
+        key: 'componentDidMount',
+        value: function componentDidMount() {
+            this.props.getBooks([{
+                id: 1,
+                title: 'this is the book title',
+                description: 'this is the book description',
+                price: 43.33
+            }, {
+                id: 2,
+                title: 'this is the second book title',
+                description: 'this is the second book description',
+                price: 60
+            }]);
+        }
+    }, {
+        key: 'render',
+        value: function render() {
+            var booksList = this.props.books.map(function (booksArr) {
+                return _react2.default.createElement(
+                    _reactBootstrap.Col,
+                    { xs: 12, sm: 6, md: 4,
+                        key: booksArr.id },
+                    _react2.default.createElement(_bookItem2.default, {
+                        id: booksArr.id,
+                        title: booksArr.title,
+
+                        description: booksArr.description,
+                        price: booksArr.price })
+                );
+            });
+            return _react2.default.createElement(
+                _reactBootstrap.Grid,
+                null,
+                _react2.default.createElement(
+                    _reactBootstrap.Row,
+                    null,
+                    _react2.default.createElement(
+                        _reactBootstrap.Col,
+                        { xs: 12, sm: 6 },
+                        _react2.default.createElement(_bookForm2.default, null)
+                    ),
+                    booksList
+                )
+            );
+        }
+    }]);
+
+    return BooksList;
+}(_react2.default.Component);
+
+function mapStateToProps(state) {
+    return {
+        books: state.books.books
+    };
+}
+
+function mapDispatchToProps(dispatch) {
+    return (0, _redux.bindActionCreators)({
+        getBooks: _booksActions.getBooks
+    }, dispatch);
+}
+
+exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(BooksList);
+
+/***/ }),
 /* 220 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -45152,7 +45271,7 @@ var _cartActions = __webpack_require__(218);
 
 var _booksActions = __webpack_require__(131);
 
-var _bookslist = __webpack_require__(485);
+var _bookslist = __webpack_require__(219);
 
 var _bookslist2 = _interopRequireDefault(_bookslist);
 
@@ -45212,7 +45331,15 @@ var _react2 = _interopRequireDefault(_react);
 
 var _reactBootstrap = __webpack_require__(177);
 
+var _reactRedux = __webpack_require__(130);
+
+var _redux = __webpack_require__(63);
+
+var _cartActions = __webpack_require__(218);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -45230,6 +45357,18 @@ var BookItem = function (_React$Component) {
     }
 
     _createClass(BookItem, [{
+        key: 'handleCart',
+        value: function handleCart() {
+            var book = [].concat(_toConsumableArray(this.props.cart), [{
+                id: this.props.id,
+                title: this.props.title,
+                description: this.props.description,
+                price: this.props.price
+            }]);
+
+            this.props.addToCart(book);
+        }
+    }, {
         key: 'render',
         value: function render() {
             return _react2.default.createElement(
@@ -45259,7 +45398,7 @@ var BookItem = function (_React$Component) {
                         ),
                         _react2.default.createElement(
                             _reactBootstrap.Button,
-                            { bsStyle: 'primary' },
+                            { onClick: this.handleCart.bind(this), bsStyle: 'primary' },
                             'Buy now!'
                         )
                     )
@@ -45271,7 +45410,19 @@ var BookItem = function (_React$Component) {
     return BookItem;
 }(_react2.default.Component);
 
-exports.default = BookItem;
+function mapStateToProps(state) {
+    return {
+        cart: state.cart.cart
+    };
+}
+
+function mapDispatchToProps(dispatch) {
+    return (0, _redux.bindActionCreators)({
+        addToCart: _cartActions.addToCart
+    }, dispatch);
+}
+
+exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(BookItem);
 
 /***/ }),
 /* 483 */
@@ -45383,7 +45534,7 @@ function cartReducers() {
 
     switch (action.type) {
         case "ADD_TO_CART":
-            return { cart: [].concat(_toConsumableArray(state.cart), _toConsumableArray(action.payload)) };
+            return { cart: [].concat(_toConsumableArray(state), _toConsumableArray(action.payload)) };
             break;
     }
 
@@ -45397,6 +45548,8 @@ function cartReducers() {
 "use strict";
 
 
+// IMPORT React
+
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
@@ -45407,17 +45560,15 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _reactRedux = __webpack_require__(130);
+var _reactBootstrap = __webpack_require__(177);
 
-var _booksActions = __webpack_require__(131);
+var _reactDom = __webpack_require__(19);
+
+var _reactRedux = __webpack_require__(130);
 
 var _redux = __webpack_require__(63);
 
-var _reactBootstrap = __webpack_require__(177);
-
-var _bookItem = __webpack_require__(482);
-
-var _bookItem2 = _interopRequireDefault(_bookItem);
+var _booksActions = __webpack_require__(131);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -45427,72 +45578,99 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var BooksList = function (_React$Component) {
-    _inherits(BooksList, _React$Component);
+// IMPORT Redux
 
-    function BooksList() {
-        _classCallCheck(this, BooksList);
 
-        return _possibleConstructorReturn(this, (BooksList.__proto__ || Object.getPrototypeOf(BooksList)).apply(this, arguments));
+// IMPORT ACTIONS
+
+
+var BooksForm = function (_React$Component) {
+    _inherits(BooksForm, _React$Component);
+
+    function BooksForm() {
+        _classCallCheck(this, BooksForm);
+
+        return _possibleConstructorReturn(this, (BooksForm.__proto__ || Object.getPrototypeOf(BooksForm)).apply(this, arguments));
     }
 
-    _createClass(BooksList, [{
-        key: 'componentDidMount',
-        value: function componentDidMount() {
-            this.props.getBooks([{
-                id: 1,
-                title: 'this is the book title',
-                description: 'this is the book description',
-                price: 43.33
-            }, {
-                id: 2,
-                title: 'this is the second book title',
-                description: 'this is the second book description',
-                price: 60
-            }]);
+    _createClass(BooksForm, [{
+        key: 'handleSubmit',
+        value: function handleSubmit() {
+            var book = [{
+                id: Math.floor(Math.random() * 11),
+                title: (0, _reactDom.findDOMNode)(this.refs.title).value,
+                description: (0, _reactDom.findDOMNode)(this.refs.description).value,
+                price: (0, _reactDom.findDOMNode)(this.refs.price).value
+            }];
+
+            this.props.postBooks(book);
         }
     }, {
         key: 'render',
         value: function render() {
-            var booksList = this.props.books.map(function (booksArr) {
-                return _react2.default.createElement(
-                    _reactBootstrap.Col,
-                    { xs: 12, sm: 6, md: 4,
-                        key: booksArr.id },
-                    _react2.default.createElement(_bookItem2.default, {
-                        id: booksArr.id,
-                        title: booksArr.title,
-
-                        description: booksArr.description,
-                        price: booksArr.price })
-                );
-            });
             return _react2.default.createElement(
-                _reactBootstrap.Grid,
+                _reactBootstrap.Well,
                 null,
                 _react2.default.createElement(
-                    _reactBootstrap.Row,
+                    _reactBootstrap.Panel,
                     null,
-                    booksList
+                    _react2.default.createElement(
+                        _reactBootstrap.FormGroup,
+                        { controlId: 'title' },
+                        _react2.default.createElement(
+                            _reactBootstrap.ControlLabel,
+                            null,
+                            'Title'
+                        ),
+                        _react2.default.createElement(_reactBootstrap.FormControl, {
+                            type: 'text',
+                            placeholder: 'Enter Title',
+                            ref: 'title' })
+                    ),
+                    _react2.default.createElement(
+                        _reactBootstrap.FormGroup,
+                        { controlId: 'description' },
+                        _react2.default.createElement(
+                            _reactBootstrap.ControlLabel,
+                            null,
+                            'Description'
+                        ),
+                        _react2.default.createElement(_reactBootstrap.FormControl, {
+                            type: 'text',
+                            placeholder: 'Enter the description',
+                            ref: 'description' })
+                    ),
+                    _react2.default.createElement(
+                        _reactBootstrap.FormGroup,
+                        { controlId: 'price' },
+                        _react2.default.createElement(
+                            _reactBootstrap.ControlLabel,
+                            null,
+                            'Price'
+                        ),
+                        _react2.default.createElement(_reactBootstrap.FormControl, {
+                            type: 'number',
+                            placeholder: 'CAD $ 2.00',
+                            ref: 'price' })
+                    )
+                ),
+                _react2.default.createElement(
+                    _reactBootstrap.Button,
+                    { onClick: this.handleSubmit.bind(this), bsStyle: 'primary' },
+                    'Save book'
                 )
             );
         }
     }]);
 
-    return BooksList;
+    return BooksForm;
 }(_react2.default.Component);
 
-function mapStateToProps(state) {
-    return {
-        books: state.books.books
-    };
-}
 function mapDispatchToProps(dispatch) {
-    return (0, _redux.bindActionCreators)({
-        getBooks: _booksActions.getBooks
-    }, dispatch);
+    return (0, _redux.bindActionCreators)({ postBooks: _booksActions.postBooks }, dispatch);
 }
-exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(BooksList);
+
+exports.default = (0, _reactRedux.connect)(null, mapDispatchToProps)(BooksForm);
 
 /***/ })
 /******/ ]);
