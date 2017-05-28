@@ -5,13 +5,13 @@ export function booksReducers(state = {
     // INITIAL STATE of books list
     books: [
         {
-            id: 1,
+            _id: 1,
             title: 'This is the book title.',
             description: 'This is the book description',
             price: 33.33
         },
         {
-            id: 2,
+            _id: 2,
             title: 'This is the second book title.',
             description: 'This is the second book description',
             price: 99.01
@@ -37,7 +37,7 @@ export function booksReducers(state = {
             // determine at which index in books array is the book to be deleted 
             const indexToDelete = currentBookToDelete.findIndex(
                 function (book) {
-                    return book.id === action.payload.id;
+                    return book._id === action.payload._id;
                 }
             )
 
@@ -52,7 +52,7 @@ export function booksReducers(state = {
             // determine at which index in books array is the book to be updated 
             const indexToUpdate = currentBookToUpdate.findIndex(
                 function (book) {
-                    return book.id === action.payload.id;
+                    return book._id === action.payload._id;
                 }
             );
 
@@ -61,15 +61,15 @@ export function booksReducers(state = {
             const newBookToUpdate = {
                 ...currentBookToUpdate[indexToUpdate],
                 title: action.payload.title
-    }
+            }       
 
-    // This log has the purpose to show you how newBookToUpdate looks like
-    // console.log("What's it newBookToUpdate", newBookToUpdate);
+            // This log has the purpose to show you how newBookToUpdate looks like
+            // console.log("What's it newBookToUpdate", newBookToUpdate);
 
-    // Use slice to remove the book at the specified index, replace with the new object and concatenate with 
-    // the rest of items in the array 
-    return { books: [...currentBookToUpdate.slice(0, indexToUpdate), newBookToUpdate, ...currentBookToUpdate.slice(indexToUpdate + 1)] };
-    break;
+            // Use slice to remove the book at the specified index, replace with the new object and concatenate with 
+            // the rest of items in the array 
+            return { books: [...currentBookToUpdate.slice(0, indexToUpdate), newBookToUpdate, ...currentBookToUpdate.slice(indexToUpdate + 1)] };
+            break;
 
 }
 return state;

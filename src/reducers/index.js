@@ -8,5 +8,5 @@ import { cartReducers } from './cartReducers';
 // HERE COMBINE THE REDUCERS
 export default combineReducers({
     books: booksReducers,
-    carts: cartReducers
+    cart: cartReducers
 });
