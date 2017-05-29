@@ -45285,6 +45285,10 @@ var _bookslist = __webpack_require__(219);
 
 var _bookslist2 = _interopRequireDefault(_bookslist);
 
+var _menu = __webpack_require__(487);
+
+var _menu2 = _interopRequireDefault(_menu);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 // STEP 1 create the store
@@ -45297,11 +45301,18 @@ var middleware = (0, _redux.applyMiddleware)(_reduxLogger2.default);
 
 var store = (0, _redux.createStore)(_index2.default, middleware);
 
+// COMPONENTS 
+
 
 (0, _reactDom.render)(_react2.default.createElement(
     _reactRedux.Provider,
     { store: store },
-    _react2.default.createElement(_bookslist2.default, null)
+    _react2.default.createElement(
+        'div',
+        null,
+        _react2.default.createElement(_menu2.default, null),
+        _react2.default.createElement(_bookslist2.default, null)
+    )
 ), document.getElementById('app'));
 
 /*
@@ -45378,8 +45389,22 @@ var BooksForm = function (_React$Component) {
             this.props.postBooks(book);
         }
     }, {
+        key: 'onDelete',
+        value: function onDelete() {
+            var bookId = (0, _reactDom.findDOMNode)(this.refs.delete).value;
+            this.props.deleteBooks(bookId);
+        }
+    }, {
         key: 'render',
         value: function render() {
+            var booksList = this.props.books.map(function (booksArr) {
+                return _react2.default.createElement(
+                    'option',
+                    { key: booksArr._id },
+                    booksArr._id
+                );
+            });
+
             return _react2.default.createElement(
                 _reactBootstrap.Well,
                 null,
@@ -45430,6 +45455,34 @@ var BooksForm = function (_React$Component) {
                         { onClick: this.handleSubmit.bind(this), bsStyle: 'primary' },
                         'Save book'
                     )
+                ),
+                _react2.default.createElement(
+                    _reactBootstrap.Panel,
+                    { style: { marginTop: '25px' } },
+                    _react2.default.createElement(
+                        _reactBootstrap.FormGroup,
+                        { controlId: 'formControlsSelect' },
+                        _react2.default.createElement(
+                            _reactBootstrap.ControlLabel,
+                            null,
+                            'Select a book id to delete'
+                        ),
+                        _react2.default.createElement(
+                            _reactBootstrap.FormControl,
+                            { ref: 'delete', componentClass: 'select', placeholder: 'select' },
+                            _react2.default.createElement(
+                                'option',
+                                { value: 'select' },
+                                'select'
+                            ),
+                            booksList
+                        )
+                    ),
+                    _react2.default.createElement(
+                        _reactBootstrap.Button,
+                        { onClick: this.onDelete.bind(this), bsStyle: 'danger' },
+                        'Delete book'
+                    )
                 )
             );
         }
@@ -45438,10 +45491,20 @@ var BooksForm = function (_React$Component) {
     return BooksForm;
 }(_react2.default.Component);
 
-function mapDispatchToProps(dispatch) {
-    return (0, _redux.bindActionCreators)({ postBooks: _booksActions.postBooks }, dispatch);
+function mapStateToProps(state) {
+    return {
+        books: state.books.books
+    };
 }
-exports.default = (0, _reactRedux.connect)(null, mapDispatchToProps)(BooksForm);
+
+function mapDispatchToProps(dispatch) {
+    return (0, _redux.bindActionCreators)({
+        postBooks: _booksActions.postBooks,
+        deleteBooks: _booksActions.deleteBooks
+    }, dispatch);
+}
+
+exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(BooksForm);
 
 /***/ }),
 /* 483 */
@@ -45912,7 +45975,7 @@ function booksReducers() {
 
             // determine at which index in books array is the book to be deleted 
             var indexToDelete = currentBookToDelete.findIndex(function (book) {
-                return book._id === action.payload._id;
+                return book._id === parseInt(action.payload);
             });
 
             // use slice to remove the book at the specified index
@@ -46030,6 +46093,108 @@ function totals(payloadArr) {
 
     return { amount: totalAmount.toFixed(2), qty: totalQty };
 }
+
+/***/ }),
+/* 487 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(0);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactBootstrap = __webpack_require__(72);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var Menu = function (_React$Component) {
+    _inherits(Menu, _React$Component);
+
+    function Menu() {
+        _classCallCheck(this, Menu);
+
+        return _possibleConstructorReturn(this, (Menu.__proto__ || Object.getPrototypeOf(Menu)).apply(this, arguments));
+    }
+
+    _createClass(Menu, [{
+        key: 'render',
+        value: function render() {
+            return _react2.default.createElement(
+                _reactBootstrap.Navbar,
+                { inverse: true, fixedTop: true },
+                _react2.default.createElement(
+                    _reactBootstrap.Navbar.Header,
+                    null,
+                    _react2.default.createElement(
+                        _reactBootstrap.Navbar.Brand,
+                        null,
+                        _react2.default.createElement(
+                            'a',
+                            { href: '/' },
+                            'React-Bootstrap'
+                        )
+                    ),
+                    _react2.default.createElement(_reactBootstrap.Navbar.Toggle, null)
+                ),
+                _react2.default.createElement(
+                    _reactBootstrap.Navbar.Collapse,
+                    null,
+                    _react2.default.createElement(
+                        _reactBootstrap.Nav,
+                        null,
+                        _react2.default.createElement(
+                            _reactBootstrap.NavItem,
+                            { eventKey: 1, href: '/about' },
+                            'About'
+                        ),
+                        _react2.default.createElement(
+                            _reactBootstrap.NavItem,
+                            { eventKey: 2, href: '/contacts' },
+                            'Contact Us'
+                        )
+                    ),
+                    _react2.default.createElement(
+                        _reactBootstrap.Nav,
+                        { pullRight: true },
+                        _react2.default.createElement(
+                            _reactBootstrap.NavItem,
+                            { eventKey: 1, href: '/admin' },
+                            'Admin'
+                        ),
+                        _react2.default.createElement(
+                            _reactBootstrap.NavItem,
+                            { eventKey: 2, href: '/cart' },
+                            'Your Cart ',
+                            _react2.default.createElement(
+                                _reactBootstrap.Badge,
+                                { className: 'badge' },
+                                '1'
+                            )
+                        )
+                    )
+                )
+            );
+        }
+    }]);
+
+    return Menu;
+}(_react2.default.Component);
+
+exports.default = Menu;
 
 /***/ })
 /******/ ]);
