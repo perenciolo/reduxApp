@@ -4,6 +4,10 @@ import React from 'react';
 import { render } from 'react-dom';
 import { Provider } from 'react-redux';
 
+// REACT-ROUTER 
+import { Router, Route, IndexRoute, browserHistory } from 'react-router';
+
+// REDUX
 import { applyMiddleware, createStore } from 'redux';
 import logger from 'redux-logger';
 
@@ -20,17 +24,24 @@ const store = createStore(reducers, middleware);
 
 // COMPONENTS 
 import BooksList from './components/pages/bookslist';
-import Menu from './components/menu';
-import Footer from './components/footer';
+import BooksForm from './components/pages/booksform';
+import Cart from './components/pages/cart';
+import Main from './main';
+
+const Routes = (
+    <Provider store={store}>
+        <Router history={browserHistory}>
+            <Route path="/" component={Main}>
+                <IndexRoute component={BooksList} />
+                <Route path="/admin" component={BooksForm} />
+                <Route path="/cart" component={Cart} />
+            </Route>
+        </Router>
+    </Provider>
+);
 
 render(
-    <Provider store={store}>
-        <div>
-            <Menu />
-            <BooksList />
-            <Footer />
-        </div>
-    </Provider>, document.getElementById('app')
+    Routes, document.getElementById('app')
 );
 
 /*

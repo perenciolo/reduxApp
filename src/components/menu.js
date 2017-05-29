@@ -8,7 +8,7 @@ class Menu extends React.Component {
             <Navbar inverse fixedTop>
                 <Navbar.Header>
                     <Navbar.Brand>
-                        <a href="/">React-Bootstrap</a>
+                        <a href="/">Blackowl BookShop</a>
                     </Navbar.Brand>
                     <Navbar.Toggle />
                 </Navbar.Header>
@@ -19,7 +19,10 @@ class Menu extends React.Component {
                     </Nav>
                     <Nav pullRight>
                         <NavItem eventKey={1} href="/admin">Admin</NavItem>
-                        <NavItem eventKey={2} href="/cart">Your Cart <Badge className="badge">1</Badge></NavItem>
+                        <NavItem eventKey={2} href="/cart">
+                            Your Cart
+                            {(this.props.cartItemsNumber)?<Badge className="badge">{this.props.cartItemsNumber}</Badge>: ('')}
+                        </NavItem>
                     </Nav>
                 </Navbar.Collapse>
             </Navbar>
