@@ -21,12 +21,14 @@ const store = createStore(reducers, middleware);
 // COMPONENTS 
 import BooksList from './components/pages/bookslist';
 import Menu from './components/menu';
+import Footer from './components/footer';
 
 render(
     <Provider store={store}>
         <div>
             <Menu />
             <BooksList />
+            <Footer />
         </div>
     </Provider>, document.getElementById('app')
 );
