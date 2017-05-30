@@ -8,11 +8,11 @@ import { postBooks, deleteBooks } from '../../actions/booksActions';
 
 class BooksForm extends React.Component {
     handleSubmit() {
-        const book = [{
+        var book = [{
             title: findDOMNode(this.refs.title).value,
             description: findDOMNode(this.refs.description).value,
             price: findDOMNode(this.refs.price).value,
-        }]
+        }];
 
         this.props.postBooks(book);
     }
@@ -23,7 +23,7 @@ class BooksForm extends React.Component {
     }
 
     render() {
-        const booksList = this.props.books.map(function (booksArr) {
+        const booksList = this.props.books.map(function(booksArr) {
             return (
                 <option key={booksArr._id}>{booksArr._id}</option>
             );
@@ -44,9 +44,8 @@ class BooksForm extends React.Component {
                         <ControlLabel>Description</ControlLabel>
                         <FormControl
                             type="text"
-                            placeholder="Enter
-                            Description"
-                        ref="description" />
+                            placeholder="Enter Description"
+                            ref="description" />
                     </FormGroup>
 
                     <FormGroup controlId="price">

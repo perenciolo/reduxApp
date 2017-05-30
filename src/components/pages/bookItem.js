@@ -45,7 +45,7 @@ class BookItem extends React.Component {
                     <Col xs={12}>
                         <h6>{this.props.title}</h6>
                         <p>{this.props.description}</p>
-                        <h6>usd. {this.props.price}</h6>
+                        <h6>CAD$ {this.props.price}</h6>
                         <Button onClick={this.handleCart.bind(this)} bsStyle='primary'>Buy now</Button>
                     </Col>
                 </Row>
