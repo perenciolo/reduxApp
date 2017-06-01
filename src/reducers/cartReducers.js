@@ -3,6 +3,14 @@
 // CART REDUCERS
 export function cartReducers(state = { cart: [] }, action) {
     switch (action.type) {
+        case "GET_CART":
+            return {
+                cart: [...state, ...action.payload],
+                totalAmount: totals(action.payload).amount,
+                totalQty: totals(action.payload).qty
+            }
+            break;
+
         case "ADD_TO_CART":
             return {
                 cart: [...state, ...action.payload],
@@ -12,44 +20,24 @@ export function cartReducers(state = { cart: [] }, action) {
             break;
 
         case "UPDATE_CART":
-            // create a copy of the current array of books
-            const currentBookToUpdate = [...state.cart];
+            return {
+                ...state,
+                cart: action.payload,
+                totalAmount: totals(action.payload).amount,
+                totalQty: totals(action.payload).qty
+            }
+            break;
 
-            // determine at which index in books array is the book to be updated 
-            const indexToUpdate = currentBookToUpdate.findIndex(
-                function (book) {
-                    return book._id === action._id;
-                }
-            );
-
-            // Create a new object with the new values and with the same array index of the item we want to replace. 
-            const newBookToUpdate = {
-                ...currentBookToUpdate[indexToUpdate],
-                quantity: currentBookToUpdate[indexToUpdate].quantity + action.unit
-    }
-
-    let cartUpdate = [
-        ...currentBookToUpdate.slice(0, indexToUpdate), newBookToUpdate,
-        ...currentBookToUpdate.slice(indexToUpdate + 1)
-    ];
-
-    return {
-        cart: [...state, ...cartUpdate],
-        totalAmount: totals(cartUpdate).amount,
-        totalQty: totals(cartUpdate).qty
-    }
-    break;
-        
         case "DELETE_CART_ITEM":
-    return {
-        cart: [...state, ...action.payload],
-        totalAmount: totals(action.payload).amount,
-        totalQty: totals(action.payload).qty
+            return {
+                cart: [...state, ...action.payload],
+                totalAmount: totals(action.payload).amount,
+                totalQty: totals(action.payload).qty
+            }
+            break;
     }
-    break;
-}
 
-return state;
+    return state;
 }
 
 // CALCULATE TOTALS

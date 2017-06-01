@@ -3,7 +3,7 @@ import React from 'react';
 import { Row, Col, Well, Button } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux'
-import { addToCart, updateCart } from '../../actions/cartActions';
+import { getCart, addToCart, updateCart } from '../../actions/cartActions';
 
 class BookItem extends React.Component {
 
@@ -30,7 +30,7 @@ class BookItem extends React.Component {
                 this.props.addToCart(book);
             } else {
                 // UPDATE THE QUANTITY
-                this.props.updateCart(_id, 1);
+                this.props.updateCart(_id, 1, this.props.cart);
             }
         } else {
             // CART IS EMPTY
@@ -62,6 +62,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
+        getCart: getCart,
         addToCart: addToCart,
         updateCart: updateCart
     }, dispatch)
