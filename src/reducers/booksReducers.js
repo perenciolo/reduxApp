@@ -7,14 +7,38 @@ export function booksReducers(state = {
 }, action) {
     switch (action.type) {
         case "GET_BOOKS":
-            return {...state, books: [...action.payload] }
+            return { ...state, books: [...action.payload] }
             break;
 
         case "POST_BOOK":
             // let books = state.books.concat(action.payload);
             // return { books };
             // spread operator requires babel-preset-stage-1
-            return { books: [...state.books, ...action.payload] }
+            return {
+                ...state,
+                books: [...state.books, ...action.payload],
+                msg: 'Saved! Click to continue.',
+                style: 'success',
+                validation: 'success'
+            }
+            break;
+
+        case "POST_BOOK_REJECTED":
+            return {
+                ...state,
+                msg: 'Please try again.',
+                style: 'danger',
+                validation: 'error'
+            }
+            break;
+
+        case "RESET_BUTTON":
+            return {
+                ...state,
+                msg: null,
+                style: 'primary',
+                validation: null
+            }
             break;
 
         case "DELETE_BOOK":
@@ -23,7 +47,7 @@ export function booksReducers(state = {
 
             // determine at which index in books array is the book to be deleted 
             const indexToDelete = currentBookToDelete.findIndex(
-                function(book) {
+                function (book) {
                     return book._id.toString() === action.payload;
                 }
             )
@@ -38,7 +62,7 @@ export function booksReducers(state = {
 
             // determine at which index in books array is the book to be updated 
             const indexToUpdate = currentBookToUpdate.findIndex(
-                function(book) {
+                function (book) {
                     return book._id === action.payload._id;
                 }
             );
@@ -48,16 +72,16 @@ export function booksReducers(state = {
             const newBookToUpdate = {
                 ...currentBookToUpdate[indexToUpdate],
                 title: action.payload.title
+            }
+
+            // This log has the purpose to show you how newBookToUpdate looks like
+            // console.log("What's it newBookToUpdate", newBookToUpdate);
+
+            // Use slice to remove the book at the specified index, replace with the new object and concatenate with 
+            // the rest of items in the array 
+            return { books: [...currentBookToUpdate.slice(0, indexToUpdate), newBookToUpdate, ...currentBookToUpdate.slice(indexToUpdate + 1)] };
+            break;
+
     }
-
-    // This log has the purpose to show you how newBookToUpdate looks like
-    // console.log("What's it newBookToUpdate", newBookToUpdate);
-
-    // Use slice to remove the book at the specified index, replace with the new object and concatenate with 
-    // the rest of items in the array 
-    return { books: [...currentBookToUpdate.slice(0, indexToUpdate), newBookToUpdate, ...currentBookToUpdate.slice(indexToUpdate + 1)] };
-    break;
-
-}
-return state;
+    return state;
 };

@@ -68,7 +68,7 @@ app.post('/books', function (req, res) {
 app.get('/books', function (req, res) {
   Books.find(function (err, books) {
     if (err) {
-      throw err;
+      console.log("# GET BOOKS ERROR: " + err)
     }
     res.json(books);
   });
@@ -80,7 +80,7 @@ app.delete('/books/:_id', function (req, res) {
 
   Books.remove(query, function (err, books) {
     if (err) {
-      throw err;
+      console.log("# DELETE BOOKS ERROR: " + err)
     }
     res.json(books);
   });
@@ -133,7 +133,7 @@ app.get('/images', function (req, res) {
       filesArr.push({ name: file });
       i++;
     });
-    
+
     // SEND THE JSON WITH THE ARRAY
     res.json(filesArr);
   });
